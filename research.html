@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Research — GutGlow · Anshul R</title>
+<meta name="description" content="GutGlow: an artefact-aware multimodal wearable framework for continuous Crohn's disease activity monitoring. A synthetic-data feasibility study, audited honestly — what it demonstrates, and what it does not." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="project.css" />
+</head>
+<body class="page-project">
+
+<div class="topbar"><div class="container topbar__inner">
+  <a class="topbar__brand" href="index.html">Anshul R · <em>A ray ahead.</em></a>
+  <nav class="topbar__nav" aria-label="Site">
+    <a href="index.html">Home</a><a href="research.html" aria-current="page">Research</a><a href="engineering.html">Engineering</a><a href="intellectual.html">Writing &amp; Impact</a><a href="failures.html">Failures</a><a href="evidence.html">Evidence</a>
+  </nav>
+</div></div>
+
+<header class="page-header page-header--bg-gutglow">
+  <div class="container">
+    <p class="eyebrow">Research · Independent project, 2026</p>
+    <h1 class="page-header__title">GutGlow</h1>
+    <p class="page-header__subtitle">An artefact-aware multimodal wearable framework for continuous Crohn's disease activity monitoring.</p>
+    <ul class="page-header__meta">
+      <li><span>Role</span> First author · co-author Ajay Panchal</li>
+      <li><span>Stack</span> Python · pandas · scikit-learn · matplotlib</li>
+      <li><span>Data</span> Simulated longitudinal cohort (see below)</li>
+      <li><span>Status</span> Feasibility study, 2026</li>
+    </ul>
+  </div>
+</header>
+
+<main>
+<section class="exhibit exhibit--dark"><div class="container container--narrow">
+  <p class="exhibit__num">I.</p><h2 class="exhibit__title">Motivation &amp; research question</h2>
+  <p class="exhibit__body has-dropcap">Crohn's disease is unpredictable in a way that makes ordinary life harder than it has to be: flares arrive with little warning. Wearable signals — heart rate, skin temperature, sleep — plausibly carry an early trace of that change. My question was narrow and testable: <em>can a simple, artefact-aware model find that trace honestly — with no leakage, no in-sample optimism, and no demo numbers dressed up as science?</em></p>
+  <p class="exhibit__body">The clinical motivation is context for the engineering, not a substitute for validation. Nothing on this page is a clinical claim.</p>
+</div></section>
+
+<section class="exhibit"><div class="container container--narrow">
+  <p class="exhibit__num">II.</p><h2 class="exhibit__title">Methods &amp; system design</h2>
+  <p class="exhibit__body">I built a simulated longitudinal dataset — 50 subjects × 90 days = 4,500 subject-days — with wearable-style signals and labelled flare activity, then an artefact-aware random-forest pipeline on top. The design premise is that wearables lie in specific ways: heart rate during motion, temperature during a shower, sleep when a strap loosens. I tried to encode that suspicion into the features and evaluation, not just into data cleaning.</p>
+  <p class="exhibit__body">Evaluation is subject-level: a subject appears in training or in test, never both. That single choice is the difference between this study's headline and its first draft.</p>
+  <table class="status-table" aria-label="Demonstrated versus proposed">
+    <thead><tr><th>Claim</th><th>Status</th><th>What it actually means</th></tr></thead>
+    <tbody>
+      <tr><td>Flare-flagging pipeline runs end-to-end</td><td><span class="tag tag--done">Demonstrated</span></td><td>On the simulated cohort described above.</td></tr>
+      <tr><td>AUC 0.769 ± 0.055</td><td><span class="tag tag--done">Demonstrated</span></td><td>Subject-level split, synthetic data. A feasibility signal for the pipeline — not clinical performance.</td></tr>
+      <tr><td>Earlier AUC 0.984</td><td><span class="tag tag--no">Withdrawn</span></td><td>Subject leakage across train/test (<em>train_test_split</em> without <em>groups=</em>). Found in my own audit; removed everywhere.</td></tr>
+      <tr><td>Real-patient flare prediction</td><td><span class="tag">Future work</span></td><td>Requires real data, covariates, ethics approval. Not yet done, not claimed.</td></tr>
+      <tr><td>Clinical validation</td><td><span class="tag tag--no">Not claimed</span></td><td>Synthetic data cannot validate a clinical tool. Full stop.</td></tr>
+    </tbody>
+  </table>
+</div></section>
+
+<section class="exhibit exhibit--inverse"><div class="container container--narrow">
+  <p class="exhibit__num">III.</p><h2 class="exhibit__title">Limitations</h2>
+  <p class="exhibit__body">Simulated data proves a pipeline can be built and audited; it cannot prove the signal exists in real patients at the strength the simulation assumes. The cohort is small, the covariates are mine, and the artefact model is a hypothesis about how wearables fail — the wearable prototype on the <a href="engineering.html">Engineering page</a> is how I am testing that hypothesis at the bench.</p>
+  <p class="exhibit__body">So now I treat every synthetic result as a question addressed to real data, and I budget for the real-data study as the actual work.</p>
+</div></section>
+
+<section class="exhibit"><div class="container container--narrow">
+  <p class="exhibit__num">Interlude</p><h2 class="exhibit__title">At ICMR</h2>
+  <p class="exhibit__body">ICMR did not find me. I cold-mailed a bunch of government offices until one of them considered the project, and then I was presenting in New Delhi to people with PhDs after their names. For the first minutes I stuttered, and read their feedback as hostility. As it went on, I stuttered less — I started answering the question actually asked and conceding the point actually right. A line attributed to Nietzsche came back to me mid-feedback: <em>the most dangerous form of blindness is when an individual thinks their worldview is the only worldview.</em> It wasn't hostility. It was the work being taken seriously enough to be argued with.</p>
+  <p class="exhibit__body">So now I send the cold mail earlier, and I stay in the room longer before deciding criticism is rejection.</p>
+</div></section>
+
+<section class="exhibit"><div class="container container--narrow">
+  <p class="exhibit__num">IV.</p><h2 class="exhibit__title">What's next</h2>
+  <p class="exhibit__body">A small real-data study: real covariates, an ethics-approved design, and evaluation pre-committed to subject-level splits. The corrected subject-level result — 0.769 ± 0.055 — is the figure this work stands on.</p>
+  <p class="exhibit__body"><a href="assets/docs/gutglow-abstract-and-introduction.pdf" target="_blank" rel="noopener">Manuscript — abstract &amp; introduction (PDF)</a> · <a href="assets/docs/gutglow-icmr-correspondence-2026.pdf" target="_blank" rel="noopener">ICMR correspondence (PDF)</a></p>
+</div></section>
+</main>
+
+<footer class="footer footer--project"><div class="container">
+  <p class="footer__line"><span class="footer__name">Anshul R</span><span class="footer__sep">·</span><span class="footer__italic">A ray ahead.</span><span class="footer__sep">·</span><a href="index.html">Back to home</a></p>
+</div></footer>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Failures — Anshul R</title>
+<meta name="description" content="The day my quality metric didn't notice the answer had gone wrong — and a bug I fixed, deleted, and shipped anyway." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="project.css" />
+<style>
+.draft-note{border:1px solid var(--rule);background:#fffaf0;padding:1rem 1.25rem;margin:0 0 2.5rem;font-size:.92rem;line-height:1.65;color:var(--ink-2)}
+.blank{font-family:var(--serif);font-style:italic;color:var(--accent-dk);white-space:nowrap}
+.pull{font-family:var(--serif);font-style:italic;font-size:clamp(1.35rem,3vw,1.8rem);line-height:1.35;color:var(--ink);border-left:3px solid var(--accent);padding-left:1.25rem;margin:2.5rem 0;max-width:34ch}
+.exhibit--dark .pull{color:var(--paper);border-left-color:#E3A472}
+</style>
+</head>
+<body class="page-project">
+<div class="topbar"><div class="container topbar__inner"><a class="topbar__brand" href="index.html">Anshul R · <em>A ray ahead.</em></a><nav class="topbar__nav" aria-label="Site"><a href="index.html">Home</a><a href="research.html">Research</a><a href="engineering.html">Engineering</a><a href="intellectual.html">Writing &amp; Impact</a><a href="failures.html" aria-current="page">Failures</a><a href="evidence.html">Evidence</a></nav></div></div>
+
+<div class="ornament ornament--top" aria-hidden="true"><svg viewBox="0 0 200 40" width="200" height="40"><path d="M0 20 L60 20 M140 20 L200 20 M70 20 a10 10 0 1 1 -0.1 0 M130 20 a10 10 0 1 1 -0.1 0 M100 8 L95 20 L100 32 L105 20 Z" fill="none" stroke="currentColor" stroke-width="1"/></svg></div>
+
+<header class="page-header page-header--bg-failures"><div class="container">
+<p class="page-header__crumb"><a href="index.html">&larr; Anshul R</a></p>
+<p class="eyebrow">Failures · one long exhibit, kept honest</p>
+<h1 class="page-header__title">The day my quality metric didn't notice</h1>
+<p class="page-header__subtitle">A number I trusted to tell me when to believe the answer was not measuring the thing that had actually broken.</p>
+<ul class="page-header__meta">
+<li><span>Subject</span> Phone-camera photoplethysmography (PPG)</li>
+<li><span>Measured</span> Smartwatch optical (PPG) sensor · still vs. moving</li>
+<li><span>Related</span> <a href="projects/wearable.html">Wearable prototype</a> · <a href="projects/gutglow.html">GutGlow</a></li>
+</ul>
+</div></header>
+
+
+<main>
+<section class="exhibit exhibit--dark"><div class="container container--narrow">
+<p class="exhibit__num">No. 01 — the main exhibit</p>
+<h2 class="exhibit__title">78 was true. 96 was confident. The metric saw no difference.</h2>
+
+<p class="exhibit__body has-dropcap">I built a small pipeline to read heart-rate variability from a smartwatch's optical sensor — the green light it shines into your wrist, watching blood volume change with each heartbeat. Nothing about the method was novel. The interesting part was what happened when I moved.</p>
+
+<p class="exhibit__body">My still wrist gave a heart rate of <strong>78 bpm</strong> at <strong>18 dB</strong> of signal-to-noise — close enough to the <strong>80 bpm</strong> I counted against my own wrist to be believable. Then I tapped my finger against the watch, and the algorithm returned <strong>96 bpm</strong>: a number I knew was wrong, reported with total confidence. And here is the part I didn't expect, and still think about — <strong>the SNR barely moved</strong>. A metric I had trusted to tell me when to believe the answer was not measuring the thing that had actually broken.</p>
+
+<p class="exhibit__body">Nothing in the code was wrong. The peak detector found the strongest periodic signal in the frame, which is exactly what I asked it to do. The strongest periodic signal was now my finger, not my heart.</p>
+
+<p class="pull">A signal's quality and a signal's meaning are two different questions, and only one of them can be automated.</p>
+
+<p class="exhibit__body">That single afternoon changed how I approach every measurement I make, because I had already made the same mistake once in a completely different place. I built a model that scored 0.984 and spent a happy week before I asked myself whether the number was too good. It was — the same subject had leaked across my train and test split, because I had used <em>train_test_split</em> without <em>groups=</em>. On a subject-level split, GutGlow's honest number is 0.769 ± 0.055. That story is told in full on the <a href="projects/gutglow.html" style="color:#E3A472">GutGlow page</a>; here it matters only because the shape of the error was identical. In both cases the fix was not an algorithm.</p>
+
+<p class="exhibit__body">So now I check the thing that can't be automated: I count my own pulse against the screen, and I treat any result nobody could have predicted as a bug until it proves otherwise.</p>
+
+<p class="exhibit__body">What I do next is also not software. Contact pressure, ambient light and the ADC's input bias are electrical problems, so the fix belongs in the front end — and in gating the measurement on motion rather than forgiving it afterwards. So now I reach for the front end first, and only then for the model.</p>
+</div></section>
+
+<section class="exhibit"><div class="container container--narrow">
+<p class="exhibit__num">Coda</p>
+<h2 class="exhibit__title">The fix I deleted</h2>
+<p class="exhibit__body">A smaller one, because not every failure arrives wearing a lab coat. Late one evening I found and fixed a real sync bug, by hand, in the editor — and then deleted the fix before it was ever committed. The app kept running. The bug's transcript did not.</p>
+<p class="exhibit__body">I shipped a working app and lost the proof that I had understood it. At the time that felt like a trade worth making. It wasn't defiance; it was tiredness making an engineering decision on my behalf.</p>
+<p class="exhibit__body">So now nothing gets fixed at 10pm without being committed first — however ugly the patch is. A working app matters more than owning the transcript, but I no longer let those two things compete.</p>
+<p class="exhibit__body exhibit__body--quiet">Why keep this page at all? Because a portfolio that only shows what worked leaves out the part of the work that taught me the most. First person, present consequence: every entry here ends in something I now do differently.</p>
+</div></section>
+</main>
+
+<footer class="footer footer--project"><div class="container"><p class="footer__line"><span class="footer__name">Anshul R</span><span class="footer__sep">·</span><span class="footer__italic">A ray ahead.</span><span class="footer__sep">·</span><a href="index.html">Back to home</a></p></div></footer>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Engineering — Anshul R</title>
+<meta name="description" content="Selected engineering: the Akshata menstrual-health application (live) and a wearable sensing prototype built to characterise how consumer-grade signals fail." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="project.css" />
+</head>
+<body>
+
+<div class="topbar"><div class="container topbar__inner">
+  <a class="topbar__brand" href="index.html">Anshul R · <em>A ray ahead.</em></a>
+  <nav class="topbar__nav" aria-label="Site">
+    <a href="index.html">Home</a><a href="research.html">Research</a><a href="engineering.html" aria-current="page">Engineering</a><a href="intellectual.html">Writing &amp; Impact</a><a href="failures.html">Failures</a><a href="evidence.html">Evidence</a>
+  </nav>
+</div></div>
+
+<header class="pagehero pagehero--bg-eng"><div class="container">
+  <p class="eyebrow">Engineering projects</p>
+  <h1 class="pagehero__title">Built, shipped, and broken — in that order.</h1>
+  <p class="pagehero__sub">Two projects: one serving real users today, one at the bench learning how signals lie. My specific contribution is stated on each; team context is not inflated into solo credit.</p>
+</div></header>
+
+<main>
+<section class="section"><div class="container">
+  <div class="grid grid--2">
+    <article class="card card--project">
+      <p class="card__year">Nov 2025 — present · Live</p>
+      <h3 class="card__title">Akshata Cycle Tracker</h3>
+      <p class="card__body"><strong>My contribution:</strong> lead developer for the forecasting engine and backend (Firebase Auth/Firestore, security rules, deployment) of a menstrual-health web app for Akshata Foundation — rebuilt from a team prototype that had never deployed. The forecast is deliberately low-variance: two input sequences only (cycle and period lengths), an exponentially-weighted mean under four cycles, and a Huber-robust autoregression blended with that mean from four cycles up. Verified against the deployed production bundle, Oct 2026.</p>
+      <ul class="card__tags"><li>React</li><li>TypeScript</li><li>Firebase</li><li>Robust regression</li></ul>
+      <p class="card__link"><a href="https://akshata-cycle-tracker.web.app" target="_blank" rel="noopener">Live app &rarr;</a> · <a href="projects/akshata.html">Full project page &rarr;</a></p>
+    </article>
+    <article class="card card--project">
+      <p class="card__year">Oct 2026 — present · Bench prototype</p>
+      <h3 class="card__title">Wearable sensing prototype</h3>
+      <p class="card__body"><strong>My contribution:</strong> self-directed hardware work with friends who lent boards — ESP/Arduino-based PPG sensing, an NTC thermistor front end, serial logging, and a phone-camera PPG pipeline. First versions short-circuited and read noise; a 3D-printed mount sealed with glue against sweat produced the first version that survived being worn. Built to test GutGlow's artefact hypothesis where it actually lives: at the sensor.</p>
+      <ul class="card__tags"><li>ESP / Arduino</li><li>KiCad</li><li>Signal conditioning</li><li>PPG</li></ul>
+      <p class="card__link"><a href="projects/wearable.html">Full project page &rarr;</a> · <a href="failures.html">What it taught me &rarr;</a></p>
+    </article>
+  </div>
+  <p class="footnote">What this page deliberately does <em>not</em> claim: no clinical validation for either project, no symptom-based prediction in Akshata (the model is blind to symptoms, mood and flow — by design), and no user-outcome statistics I cannot show. Evidence status for every claim is tabulated on the <a href="evidence.html">Evidence page</a>.</p>
+</div></section>
+</main>
+
+<footer class="footer"><div class="container container--narrow">
+  <p class="footer__line"><span class="footer__name">Anshul R</span><span class="footer__sep">·</span><span class="footer__italic">A ray ahead.</span></p>
+  <p class="footer__small">Built by me.</p>
+</div></footer>
+</body>
+</html>

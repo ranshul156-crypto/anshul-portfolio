@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Akshata Cycle Tracker — Anshul R</title>
+<meta name="description" content="Rebuilding a menstrual-health prototype that never shipped — a deliberately low-variance forecast fit on cycle dates only, and what ~60 real users taught me." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="../project.css" />
+</head>
+<body class="page-project">
+<div class="topbar"><div class="container topbar__inner"><a class="topbar__brand" href="../index.html">Anshul R · <em>A ray ahead.</em></a><nav class="topbar__nav" aria-label="Site"><a href="../index.html">Home</a><a href="../research.html">Research</a><a href="../engineering.html" aria-current="page">Engineering</a><a href="../intellectual.html">Writing &amp; Impact</a><a href="../failures.html">Failures</a><a href="../evidence.html">Evidence</a></nav></div></div>
+
+
+<div class="ornament ornament--top" aria-hidden="true">
+  <svg viewBox="0 0 200 40" width="200" height="40"><path d="M0 20 L60 20 M140 20 L200 20 M70 20 a10 10 0 1 1 -0.1 0 M130 20 a10 10 0 1 1 -0.1 0 M100 8 L95 20 L100 32 L105 20 Z" fill="none" stroke="currentColor" stroke-width="1"/></svg>
+</div>
+
+<header class="page-header page-header--bg-akshata">
+  <div class="container">
+    <p class="page-header__crumb"><a href="../index.html">&larr; Anshul R</a></p>
+    <p class="eyebrow">Project · Nov 2025 – present</p>
+    <h1 class="page-header__title">Akshata Cycle Tracker</h1>
+    <p class="page-header__subtitle">
+      A prototype that looked finished and had never shipped. I rebuilt it so it could.
+    </p>
+    <ul class="page-header__meta">
+      <li><span>Role</span> Lead developer — forecasting engine + backend</li>
+      <li><span>Stack</span> React · TypeScript · Firebase Auth · Firestore</li>
+      <li><span>Live</span> <a href="https://akshata-cycle-tracker.web.app" target="_blank" rel="noopener">akshata-cycle-tracker.web.app</a></li>
+      <li><span>Users</span> Live for Akshata Foundation (NGO) — count author-reported, see Evidence page</li>
+    </ul>
+  </div>
+</header>
+
+
+<main>
+
+<section class="exhibit exhibit--dark">
+  <div class="container container--narrow">
+    <p class="exhibit__num">I.</p>
+    <h2 class="exhibit__title">Context</h2>
+    <p class="exhibit__body has-dropcap">
+      Akshata Foundation works on menstrual health. When I joined, there was already a prototype — designed, demoed, and never deployed. Nobody could quite tell me why it hadn't shipped, which is usually the sign that “ship” was treated as the last step instead of the first constraint.
+    </p>
+    <p class="exhibit__body">
+      Auth wasn't wired. Firestore rules weren't written. The forecasting engine didn't exist. I took on all three, because a health app that only works in a presentation is not a health app. It's a picture of one.
+    </p>
+    <p class="exhibit__body">
+      So now I start from deployment backwards. If a feature can't survive real accounts, real rules, and real phones, I don't count it as built.
+    </p>
+  </div>
+</section>
+
+<section class="exhibit">
+  <div class="container container--narrow">
+    <p class="exhibit__num">II.</p>
+    <h2 class="exhibit__title">Method</h2>
+    <p class="exhibit__body">
+      The forecast sees two sequences and nothing else. From the days a user marks as period days, it groups bleeds (a gap of two days or less is the same bleed) and derives <em>cycleLengths[]</em> — days between bleed starts — and <em>periodLengths[]</em>. A computed cycle is kept only if it lands between 16 and 59 days; anything outside that is dropped before the model ever sees it, because it is almost certainly a logging gap, not a cycle.
+    </p>
+    <p class="exhibit__body">
+      With fewer than four cycles, it does the only defensible thing: an exponentially-weighted mean, recent cycles counting more, with period length defaulting to five days. It labels itself <em>low</em> confidence while it does so. There isn't enough history to justify anything cleverer, and a confident wrong prediction is worse than a modest one.
+    </p>
+    <p class="exhibit__body">
+      From four cycles up, a per-user autoregression joins in: lag order 1–3, chosen by error on the held-out last cycle, fit by OLS and then twenty IRLS passes with Huber weights (c = 1.35) so one mistyped month can't drag the forecast with it. That prediction is blended 50/50 with the weighted mean, clamped to 21–60 days for cycle and 2–10 for period. Confidence only earns the word <em>high</em> at ten or more cycles, and never for an irregular history.
+    </p>
+    <p class="exhibit__body">
+      And then the honest part, which I verified against the deployed production bundle on 2026-10-05 rather than from memory: mood, symptoms and flow grade are logged, displayed and exported — the forecast is blind to all three. Ovulation is not modelled either; it is predicted cycle length minus fourteen, fixed arithmetic wearing a lab coat. This is a deliberately low-variance model for people who have four to eight data points, and it ignores almost everything on purpose.
+    </p>
+    <p class="exhibit__body">
+      So now I describe models from the code that is actually deployed, not from the version I remember building. If symptoms ever enter the forecast, that will be a real second version — and the sentence goes on this page after the code does it, not before.
+    </p>
+    <p class="exhibit__body exhibit__body--quiet">
+      Privacy pass, Oct 2026: menstrual data is sensitive data. Nothing is stored in a form the user hasn't explicitly agreed to — consent first, features second.<br>
+      Technical line, for those who check: a per-user Huber-robust autoregression blended with an exponentially-weighted mean, fit on self-reported cycle and period lengths only. Not ARIMA — there is no differencing and no moving-average term, whatever the current UI label says.
+    </p>
+  </div>
+</section>
+
+<section class="exhibit exhibit--inverse">
+  <div class="container container--narrow">
+    <p class="exhibit__num">III.</p>
+    <h2 class="exhibit__title">Failure</h2>
+    <p class="exhibit__body">
+      Day one, a real user found a bug I hadn't. I had tested the app thoroughly — as myself, on my data, in the order I expected it to be used. She used it the way people actually use things.
+    </p>
+    <p class="exhibit__body">
+      Nothing about that is unusual, which is exactly why it stung. “Tested by me” and “tested by a real user” turned out to be different categories, and I had been filing them under the same word.
+    </p>
+    <p class="exhibit__body">
+      So now anything that touches the forecasting path ships behind a feature flag, and gets watched with real usage before it reaches everyone. A wrong prediction on someone else's body is worse than no prediction at all.
+    </p>
+  </div>
+</section>
+
+<section class="exhibit">
+  <div class="container container--narrow">
+    <p class="exhibit__num">IV.</p>
+    <h2 class="exhibit__title">What's next</h2>
+    <p class="exhibit__body">
+      First, a small naming fix that retires a real inaccuracy: the app's UI still says “ARIMA + Huber ML predictions,” and it isn't ARIMA. The label becomes <em>Adaptive forecast (robust regression + weighted mean)</em> — boring, and true. Anonymised, aggregate analytics after that, so the Foundation can see patterns across users without seeing any individual. And the privacy/consent pass written up as a short standalone document, so another small NGO doesn't have to reinvent it.
+    </p>
+    <p class="exhibit__body">
+      The goal was never to scale this as fast as possible. It's for the work to still be running, correctly, after I'm no longer the person maintaining it. So now I write the handover notes as I go, not at the end.
+    </p>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer footer--project">
+  <div class="container">
+    <p class="footer__line">
+      <span class="footer__name">Anshul R</span>
+      <span class="footer__sep">·</span>
+      <span class="footer__italic">A ray ahead.</span>
+      <span class="footer__sep">·</span>
+      <a href="../index.html">Back to home</a>
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>

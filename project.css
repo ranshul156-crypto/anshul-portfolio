@@ -1,0 +1,214 @@
+/* =================================================================
+   Project (museum-style) pages
+   Design notes:
+   - Labelled exhibits (I, II, III, IV) with quiet typography.
+   - Alternating warm / dark bands create the "walk through a museum"
+     pacing. Visual breathing room, no card grid clutter.
+   - Restrained Renaissance ornaments: divider rules, drop-cap,
+     anatomical flourish on the darkest section.
+   ================================================================= */
+
+.page-project {
+  background: var(--paper);
+}
+
+/* ornament strip — small, bookish, doesn't dominate */
+.ornament {
+  display: flex;
+  justify-content: center;
+  padding: 2.5rem 0 0;
+  color: var(--accent);
+  opacity: 0.65;
+}
+
+/* page header — sits alone, generous space */
+.page-header {
+  padding: 3rem 0 5rem;
+  border-bottom: 1px solid var(--rule);
+  text-align: left;
+}
+.page-header__crumb {
+  margin: 0 0 2rem;
+  font-size: 0.82rem;
+  color: var(--ink-3);
+}
+.page-header__crumb a {
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 1px;
+}
+
+.page-header__title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(3rem, 9vw, 6.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+  color: var(--ink);
+  margin: 0.6rem 0 1.5rem;
+  max-width: 16ch;
+}
+.page-header__subtitle {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+  line-height: 1.45;
+  color: var(--ink-2);
+  max-width: 48ch;
+  margin: 0 0 2.5rem;
+}
+.page-header__meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.9rem 2rem;
+  border-top: 1px solid var(--rule);
+  padding-top: 1.4rem;
+  font-size: 0.88rem;
+  color: var(--ink-2);
+}
+.page-header__meta li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.page-header__meta span {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.page-header__meta a { color: var(--accent-dk); text-decoration: none; border-bottom: 1px solid var(--rule); }
+
+/* exhibit block — the museum plaque */
+.exhibit {
+  padding: clamp(4rem, 9vw, 7rem) 0;
+  border-top: 1px solid var(--rule);
+  position: relative;
+}
+.exhibit:first-of-type { border-top: 0; }
+
+.exhibit__num {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.15rem;
+  color: var(--accent);
+  letter-spacing: 0.04em;
+  margin: 0 0 1.5rem;
+}
+
+.exhibit__title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  margin: 0 0 2.5rem;
+  max-width: 18ch;
+}
+
+.exhibit__body {
+  font-family: var(--sans);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--ink-2);
+  margin: 0 0 1.4rem;
+  max-width: 60ch;
+}
+.exhibit__body a { color: var(--accent-dk); }
+.exhibit--dark .exhibit__body a { color: #E3A472; }
+.exhibit__body em { font-style: italic; color: var(--ink); }
+.exhibit__body strong { font-weight: 600; color: var(--ink); }
+.exhibit__body--quiet {
+  color: var(--ink-3);
+  font-size: 0.95rem;
+  font-style: italic;
+}
+
+/* dark exhibit — resets palette like walking into a darker gallery */
+.exhibit--dark {
+  background: var(--ink);
+  color: var(--paper);
+  border-top-color: var(--ink);
+}
+.exhibit--dark .exhibit__num { color: #E3A472; }
+.exhibit--dark .exhibit__title { color: var(--paper); }
+.exhibit--dark .exhibit__body { color: #DCD3C2; }
+.exhibit--dark .exhibit__body em { color: #E3A472; }
+.exhibit--dark .exhibit__body strong { color: var(--paper); }
+.exhibit--dark .exhibit__body--quiet { color: #9E9385; }
+
+/* inverse exhibit — paper background with the inverse accent block on the left */
+.exhibit--inverse {
+  background: var(--paper);
+  position: relative;
+}
+.exhibit--inverse::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 10%;
+  bottom: 10%;
+  width: 6px;
+  background: var(--accent);
+  opacity: 0.5;
+}
+
+/* project footer reuse */
+.footer--project {
+  margin-top: 0;
+}
+
+/* =================================================================
+   RENAISSANCE-RESTRAINT ornament set (SVG only, inline, monochrome)
+   ================================================================= */
+
+/* a Vitruvian-style flourish, used as section break */
+.flourish {
+  display: block;
+  margin: 1.5rem auto 0;
+  color: var(--accent);
+  opacity: 0.55;
+  width: 64px;
+}
+
+/* drop-cap, used in the first exhibit body of each project */
+.has-dropcap::first-letter {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 4.2rem;
+  line-height: 0.85;
+  float: left;
+  margin: 0.15rem 0.6rem 0 0;
+  color: var(--accent);
+}
+
+/* mobile */
+@media (max-width: 560px) {
+  .page-header { padding-bottom: 3rem; }
+  .page-header__meta { grid-template-columns: 1fr; }
+  .exhibit__title { font-size: clamp(1.75rem, 8vw, 2.4rem); }
+}
+
+/* ---------- painting washes behind page headers (background only) ----------
+   Sourced from paintings posted by @rolvatore; public-domain originals
+   via Wikimedia Commons. Deliberately washed to ~10% visibility: texture
+   and light, never an exhibit. No titles, no captions, no descriptions. */
+.page-header--bg-gutglow {
+  background: linear-gradient(90deg, rgba(247,243,236,.88) 0%, rgba(247,243,236,.68) 60%, rgba(247,243,236,.60) 100%),
+              url("assets/art/raft-of-the-medusa.jpg") center 30% / cover no-repeat;
+}
+.page-header--bg-akshata {
+  background: linear-gradient(90deg, rgba(247,243,236,.88) 0%, rgba(247,243,236,.68) 60%, rgba(247,243,236,.60) 100%),
+              url("assets/art/spring.jpg") center 30% / cover no-repeat;
+}
+.page-header--bg-wearable {
+  background: linear-gradient(90deg, rgba(247,243,236,.88) 0%, rgba(247,243,236,.68) 60%, rgba(247,243,236,.60) 100%),
+              url("assets/art/Cotopaxi.jpg") center 38% / cover no-repeat;
+}
+.page-header--bg-failures {
+  background: linear-gradient(90deg, rgba(247,243,236,.90) 0%, rgba(247,243,236,.72) 60%, rgba(247,243,236,.64) 100%),
+              url("assets/art/inferno.jpg") center 45% / cover no-repeat;
+}
