@@ -90,7 +90,7 @@
   <div class="container container--narrow">
     <p class="eyebrow">The question underneath all of it</p>
     <h2 class="section__title">A signal's quality and a signal's meaning are two different questions.</h2>
-    <p class="prose">Only one of them can be automated. My GutGlow model once scored 0.984 because the same subject had leaked across my train/test split. On a subject-level split, the honest feasibility result is <strong>0.769 ± 0.055</strong> — on synthetic data, which demonstrates a pipeline, not a clinical claim. That distinction is the whole research programme, and it's written out in full on the Research page.</p>
+    <p class="prose">Only one of them can be automated. My GutGlow model once scored 0.984 on a split I later found was leaking the same subject into train and test. Rebuilt with subject-level evaluation and temporal smoothing, the current model reproduces <strong>AUC 0.980 · PR-AUC 0.862 · sensitivity 76.7%</strong> on 15 held-out simulated subjects — synthetic data, one split, no confidence interval yet: a feasibility result for a pipeline, not a clinical claim. The number matters less than the fact that anyone can rerun the repo and get it. That distinction is the whole research programme, and it's written out in full on the Research page.</p>
     <p class="prose"><a href="research.html" class="featured-link">Read the research &rarr;</a> &nbsp;·&nbsp; <a href="failures.html" class="featured-link">Visit the failures room &rarr;</a></p>
   </div>
 </section>
